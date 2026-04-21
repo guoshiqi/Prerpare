@@ -27,6 +27,7 @@ class MainListActivity : ComponentActivity() {
         binding.rvList.adapter = ArticleAdapter(mockList) { article, position ->
             run {
                 val intent = Intent(this, ListDetailActivity::class.java)
+                intent.putExtra("data", article)
                 startActivity(intent)
             }
         }

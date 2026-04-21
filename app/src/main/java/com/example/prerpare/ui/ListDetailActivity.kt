@@ -11,22 +11,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.prerpare.model.Article
 import com.example.prerpare.ui.theme.PrerpareTheme
 
-class ListDetailActivity: ComponentActivity()  {
+class ListDetailActivity : ComponentActivity() {
+    var article: Article? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        article= intent.getParcelableExtra<Article>("data")
         enableEdgeToEdge()
         setContent {
             PrerpareTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = article?.title?:"Android",
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
+
     }
 }
 
