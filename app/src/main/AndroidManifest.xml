@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.MainListActivity"
+            android:theme="@style/Theme.Prerpare" />
+
+        <activity
+            android:name=".ui.ListDetailActivity"
+            android:theme="@style/Theme.Prerpare" />
     </application>
 
 </manifest>
