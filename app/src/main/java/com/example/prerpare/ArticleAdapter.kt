@@ -3,12 +3,20 @@ package com.example.prerpare
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.prerpare.model.Article
+import com.example.prerpare.data.model.Article
 import com.example.prerpare.databinding.ItemArticleBinding
 
 class ArticleAdapter(
-    private val items: List<Article>, private val onItemClick: (Article, Int) -> Unit
+    private val onItemClick: (Article, Int) -> Unit
 ) : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
+
+    private val items = mutableListOf<Article>()
+
+    fun setData(newList: List<Article>) {
+        items.clear()
+        items.addAll(newList)
+        notifyDataSetChanged()
+    }
 
     class ArticleViewHolder(
         private val binding: ItemArticleBinding

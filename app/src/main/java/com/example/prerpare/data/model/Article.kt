@@ -1,4 +1,4 @@
-package com.example.prerpare.model
+package com.example.prerpare.data.model
 
 import android.os.Parcel
 import android.os.Parcelable
