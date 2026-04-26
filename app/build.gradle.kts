@@ -51,7 +51,12 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
+    implementation(libs.retrofit2)
+    implementation(libs.gson)
+    implementation(libs.okhttp3)
     testImplementation(libs.junit)
+    testImplementation("com.squareup.okhttp3:mockwebserver:5.x.x")
+// OkHttp MockWebServer，用于测试
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
