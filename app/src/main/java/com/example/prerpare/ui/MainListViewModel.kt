@@ -9,11 +9,10 @@ import com.example.prerpare.data.model.Article
 import kotlinx.coroutines.launch
 
 
-class MainListViewModel : ViewModel() {
+class MainListViewModel(private val repository: MainListRepository) : ViewModel() {
 
-    private val repositor: MainListRepository = MainListRepository()
-    private val _articles = MutableLiveData<List<Article>>()
-    val articles: LiveData<List<Article>> = _articles
+    private val _articles = MutableLiveData<Result<List<Article>>>()
+    val articles: LiveData<Result<List<Article>>> = _articles
 
     private val _loading = MutableLiveData(false)
     val loading: LiveData<Boolean> = _loading
@@ -21,7 +20,8 @@ class MainListViewModel : ViewModel() {
     fun loadArticles() {
         viewModelScope.launch {
             _loading.value = true
-            _articles.value = repositor.getArticles()
+            val result = repository.getArticles()
+            _articles.postValue(result)
             _loading.value = false
         }
     }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -54,11 +55,20 @@ dependencies {
     implementation(libs.retrofit2)
     implementation(libs.gson)
     implementation(libs.okhttp3)
-    implementation("com.squareup.okhttp3:logging-interceptor:5.3.0")
+    implementation(libs.log.interceptor)
+    // Room 依赖
+    implementation (libs.room.runtime)  // 使用适合的版本
+    ksp(libs.room.compiler)
+
+    // 如果你使用 Kotlin，还需要这个依赖
+    implementation (libs.room.ktx)  // 用于 Kotlin 支持
+
+    // 如果使用测试库
+    testImplementation (libs.room.test)
 // 使用适合的版本
     testImplementation(libs.junit)
-    testImplementation(libs.mockwebserver)
-    testImplementation("org.robolectric:robolectric:4.16.1")
+    implementation(libs.mockwebserver)
+    testImplementation(libs.rebolectic)
 // OkHttp MockWebServer，用于测试
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,10 +1,11 @@
 package com.example.prerpare.data.network
 
 import com.example.prerpare.data.model.Article
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ApiService {
     @GET("article/{article}")
-    suspend fun getArticles(@Path("article") index: String): List<Article>
+    suspend fun getArticles(@Path("article") index: String): Response<List<Article>>
 }
