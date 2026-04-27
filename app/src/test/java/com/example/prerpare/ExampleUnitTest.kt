@@ -1,14 +1,30 @@
 package com.example.prerpare
 
+import android.util.Log
+import com.example.prerpare.data.network.ApiService
+import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.mockwebserver.MockResponse
+import okhttp3.mockwebserver.MockWebServer
+import org.junit.After
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.Before
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [28]) // 设置模拟的 SDK 版本
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
@@ -42,4 +58,69 @@ class ExampleUnitTest {
 
     fun add(a:Int,b:Int=100)=a+b
 
+    private lateinit var mockWebServer: MockWebServer
+    private lateinit var client: OkHttpClient
+
+    @Before
+    fun setUp() {
+        // 创建 MockWebServer 实例
+        mockWebServer = MockWebServer()
+
+        // 启动 MockWebServer
+        mockWebServer.start()
+
+        // 设置 OkHttpClient
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.NONE // 禁用日志
+
+        // 创建 OkHttpClient 并添加日志拦截器
+        client = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .build()
+    }
+
+
+    @Test
+    fun testGetUser() {
+
+        // 获取 MockWebServer 的 URL
+        val baseUrl = mockWebServer.url("/")
+
+        // 创建 Retrofit 实例并将 MockWebServer 的 URL 作为 baseUrl
+        val retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+
+        val apiService = retrofit.create(ApiService::class.java)
+
+        // 读取模拟的 JSON 响应
+        val mockResponse = MockResponse()
+            .setResponseCode(200)
+            .setBody(loadMockResponse())  // 加载配置文件中的响应
+        mockWebServer.enqueue(mockResponse)
+
+        // 调用 Retrofit 的 API 方法
+        val articles = runBlocking {
+            apiService.getArticles("octocat")
+        }
+
+        // 验证结果
+        println( articles.toString())
+
+    }
+
+    fun loadMockResponse(): String {
+        val inputStream = javaClass.classLoader?.getResourceAsStream("mock_response.json")
+        val json = inputStream?.bufferedReader().use { it?.readText() }
+        // 加载本地的 mock_response.json 文件
+        return json.toString()
+    }
+
+    @After
+    fun tearDown() {
+        // 停止 MockWebServer
+        mockWebServer.shutdown()
+    }
 }

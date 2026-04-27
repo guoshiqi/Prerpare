@@ -54,8 +54,11 @@ dependencies {
     implementation(libs.retrofit2)
     implementation(libs.gson)
     implementation(libs.okhttp3)
+    implementation("com.squareup.okhttp3:logging-interceptor:5.3.0")
+// 使用适合的版本
     testImplementation(libs.junit)
-    testImplementation("com.squareup.okhttp3:mockwebserver:5.x.x")
+    testImplementation(libs.mockwebserver)
+    testImplementation("org.robolectric:robolectric:4.16.1")
 // OkHttp MockWebServer，用于测试
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
