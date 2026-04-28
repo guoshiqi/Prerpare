@@ -65,7 +65,7 @@ class MainListActivity : ComponentActivity() {
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.loadArticles()
+            viewModel.loadArticles(true)
         }
         binding.rvList.layoutManager = LinearLayoutManager(this)
         adapter = ArticleAdapter { article, position ->
@@ -76,7 +76,7 @@ class MainListActivity : ComponentActivity() {
             }
         }
         binding.rvList.adapter = adapter
-
+        viewModel.loadArticles(false)
     }
 
 

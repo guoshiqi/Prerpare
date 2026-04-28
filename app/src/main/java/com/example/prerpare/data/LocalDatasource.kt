@@ -7,11 +7,7 @@ class LocalDataSource(private val dao: ArticleDAO) : DataSource {
     override suspend fun getData(): Result<List<Article>> {
         return try {
             val articles = dao.getAllArticles()
-            if (articles.isNotEmpty()) {
-                Result.success(articles)
-            } else {
-                Result.failure(Exception("No data found in local database"))
-            }
+            Result.success(articles)
         } catch (e: Exception) {
             Result.failure(e)
         }

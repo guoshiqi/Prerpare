@@ -26,5 +26,6 @@
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:text="empty"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

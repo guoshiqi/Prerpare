@@ -14,10 +14,10 @@ class MainListViewModel(private val repository: MainListRepository) : ViewModel(
     private val _uiState = MutableStateFlow<UiState<List<Article>>>(UiState.Loading)
     val uiState: StateFlow<UiState<List<Article>>> = _uiState
 
-    fun loadArticles() {
+    fun loadArticles(network: Boolean) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            val result = repository.getArticles()
+            val result = repository.getArticles(network)
             result.fold(
                 onSuccess = { data ->
                     if (data.isEmpty()) {
