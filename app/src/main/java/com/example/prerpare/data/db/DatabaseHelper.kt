@@ -1,8 +1,7 @@
-package com.example.prerpare
+package com.example.prerpare.data.db
 
 import android.content.Context
 import androidx.room.Room
-import com.example.prerpare.data.db.AppDatabase
 
 object DatabaseHelper {
 

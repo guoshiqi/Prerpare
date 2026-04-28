@@ -16,6 +16,7 @@ okhttp3 = "5.3.0"
 room = "2.7.0"     # Room 版本
 rebolectic="4.16.1"
 ksp="2.3.4"
+swiperefreshlayout = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +45,7 @@ room_runtime={module="androidx.room:room-runtime",version.ref="room"}
 room_ktx={module="androidx.room:room-ktx",version.ref="room"}
 room_test={module="androidx.room:room-testing",version.ref="room"}
 rebolectic={module="org.robolectric:robolectric",version.ref="rebolectic"}
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 
 [plugins]

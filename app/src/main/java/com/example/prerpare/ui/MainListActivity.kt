@@ -2,20 +2,21 @@ package com.example.prerpare.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.room.Room
 import com.example.prerpare.ArticleAdapter
-import com.example.prerpare.DatabaseHelper
 import com.example.prerpare.PrepareApplication
 import com.example.prerpare.data.LocalDataSource
 import com.example.prerpare.data.MainListRepository
 import com.example.prerpare.data.RemoteDataSource
-import com.example.prerpare.data.db.AppDatabase
-import com.example.prerpare.data.db.dao.ArticleDAO
+import com.example.prerpare.data.db.DatabaseHelper
+import com.example.prerpare.data.model.Article
 import com.example.prerpare.databinding.ActivityListLayoutBinding
+import kotlinx.coroutines.launch
 
 class MainListActivity : ComponentActivity() {
     private lateinit var binding: ActivityListLayoutBinding
@@ -37,10 +38,34 @@ class MainListActivity : ComponentActivity() {
         val factory = ArticleViewModelFactory(articleRepository)
         viewModel = ViewModelProvider(this, factory).get(MainListViewModel::class.java)
 
-        viewModel.articles.observe(this) { articles ->
-            articles.getOrNull()?.let { data ->
-                adapter.setData(data)
+        lifecycleScope.launch {
+            viewModel.uiState.collect { state ->
+                when (state) {
+                    is UiState.Loading -> {
+                        binding.swipeRefreshLayout.isRefreshing = true
+                        showLoading()
+                    }
+
+                    is UiState.Success -> {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        showData(state.data)
+                    }
+
+                    is UiState.Error -> {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        showError(state.message)
+                    }
+
+                    is UiState.Empty -> {
+                        binding.swipeRefreshLayout.isRefreshing = false
+                        showEmpty()
+                    }
+                }
             }
+        }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.loadArticles()
         }
         binding.rvList.layoutManager = LinearLayoutManager(this)
         adapter = ArticleAdapter { article, position ->
@@ -51,6 +76,26 @@ class MainListActivity : ComponentActivity() {
             }
         }
         binding.rvList.adapter = adapter
-        viewModel.loadArticles()
+
+    }
+
+
+    private fun showError(message: String) {
+        binding.emptyView.visibility = View.GONE
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showEmpty() {
+        binding.emptyView.visibility = View.VISIBLE
+    }
+
+    private fun showLoading() {
+
+
+    }
+
+    private fun showData(articles: List<Article>) {
+        adapter.setData(articles)
+        binding.emptyView.visibility = View.GONE
     }
 }

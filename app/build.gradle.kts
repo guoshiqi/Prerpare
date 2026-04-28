@@ -57,7 +57,8 @@ dependencies {
     implementation(libs.okhttp3)
     implementation(libs.log.interceptor)
     // Room 依赖
-    implementation (libs.room.runtime)  // 使用适合的版本
+    implementation (libs.room.runtime)
+    implementation(libs.androidx.swiperefreshlayout)  // 使用适合的版本
     ksp(libs.room.compiler)
 
     // 如果你使用 Kotlin，还需要这个依赖
