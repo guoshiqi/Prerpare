@@ -7,6 +7,7 @@ class MainListRepository( private val localDataSource: LocalDataSource,
                           private val remoteDataSource: RemoteDataSource) {
     suspend fun getArticles(network: Boolean): Result<List<Article>> {
         return if (network){
+            //强制网络更新
             delay(3000)
             val remote=remoteDataSource.getData()
             if (remote.isSuccess){

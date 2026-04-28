@@ -1,4 +1,4 @@
-package com.example.prerpare.ui
+package com.example.prerpare.ui.mainlist
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.prerpare.ArticleAdapter
+import com.example.prerpare.ui.mainlist.ArticleAdapter
 import com.example.prerpare.PrepareApplication
 import com.example.prerpare.data.LocalDataSource
 import com.example.prerpare.data.MainListRepository
@@ -16,6 +16,8 @@ import com.example.prerpare.data.RemoteDataSource
 import com.example.prerpare.data.db.DatabaseHelper
 import com.example.prerpare.data.model.Article
 import com.example.prerpare.databinding.ActivityListLayoutBinding
+import com.example.prerpare.ArticleViewModelFactory
+import com.example.prerpare.ui.ListDetailActivity
 import kotlinx.coroutines.launch
 
 class MainListActivity : ComponentActivity() {

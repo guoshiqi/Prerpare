@@ -1,4 +1,4 @@
-package com.example.prerpare.ui
+package com.example.prerpare.ui.mainlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

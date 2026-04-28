@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.prerpare.ui.MainListActivity
+import com.example.prerpare.ui.mainlist.MainListActivity
 import com.example.prerpare.ui.theme.PrerpareTheme
 
 class MainActivity : ComponentActivity() {

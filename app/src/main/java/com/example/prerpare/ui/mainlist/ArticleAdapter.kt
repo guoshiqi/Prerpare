@@ -1,4 +1,4 @@
-package com.example.prerpare
+package com.example.prerpare.ui.mainlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

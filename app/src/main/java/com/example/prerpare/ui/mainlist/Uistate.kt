@@ -1,4 +1,4 @@
-package com.example.prerpare.ui
+package com.example.prerpare.ui.mainlist
 
 // 定义 UI State
 sealed class UiState<out T> {
