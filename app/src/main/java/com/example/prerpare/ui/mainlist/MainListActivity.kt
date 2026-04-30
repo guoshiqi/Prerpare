@@ -8,7 +8,6 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.prerpare.ui.mainlist.ArticleAdapter
 import com.example.prerpare.PrepareApplication
 import com.example.prerpare.data.LocalDataSource
 import com.example.prerpare.data.MainListRepository
@@ -43,22 +42,22 @@ class MainListActivity : ComponentActivity() {
         lifecycleScope.launch {
             viewModel.uiState.collect { state ->
                 when (state) {
-                    is UiState.Loading -> {
+                    is ListUiState.Loading -> {
                         binding.swipeRefreshLayout.isRefreshing = true
                         showLoading()
                     }
 
-                    is UiState.Success -> {
+                    is ListUiState.Success -> {
                         binding.swipeRefreshLayout.isRefreshing = false
                         showData(state.data)
                     }
 
-                    is UiState.Error -> {
+                    is ListUiState.Error -> {
                         binding.swipeRefreshLayout.isRefreshing = false
                         showError(state.message)
                     }
 
-                    is UiState.Empty -> {
+                    is ListUiState.Empty -> {
                         binding.swipeRefreshLayout.isRefreshing = false
                         showEmpty()
                     }

@@ -2,9 +2,15 @@ package com.example.prerpare
 
 import android.util.Log
 import com.example.prerpare.data.network.ApiService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -32,31 +38,31 @@ class ExampleUnitTest {
     }
 
     @Test
-    fun first_day_action(){
-        val a=1
-        var b=2
-        var c:String?="s"
+    fun first_day_action() {
+        val a = 1
+        var b = 2
+        var c: String? = "s"
         c?.length
-        c=c?:"sdf"
-        c="asd,$c"
+        c = c ?: "sdf"
+        c = "asd,$c"
         println(c)
-        val result=if (c==c){
+        val result = if (c == c) {
             "yes"
-        }else{
+        } else {
             "false"
         }
         println(result)
-        when(result){
-            "yes"->println("成")
+        when (result) {
+            "yes" -> println("成")
         }
-        println(add(1,2))
+        println(add(1, 2))
         println(add(1))
-        val numbers=listOf(1,2,3,4,5)
-        val even=numbers.filter { it%2==1 }.map { it*2 }
+        val numbers = listOf(1, 2, 3, 4, 5)
+        val even = numbers.filter { it % 2 == 1 }.map { it * 2 }
         println(even)
     }
 
-    fun add(a:Int,b:Int=100)=a+b
+    fun add(a: Int, b: Int = 100) = a + b
 
     private lateinit var mockWebServer: MockWebServer
     private lateinit var client: OkHttpClient
@@ -107,7 +113,7 @@ class ExampleUnitTest {
         }
 
         // 验证结果
-        println( articles.toString())
+        println(articles.toString())
 
     }
 
@@ -122,5 +128,26 @@ class ExampleUnitTest {
     fun tearDown() {
         // 停止 MockWebServer
         mockWebServer.shutdown()
+    }
+
+    @Test
+    fun dispatcherDemo() {
+        runBlocking {
+            launch {
+                delay(1000)
+                println("launch")
+                withContext(Dispatchers.IO) {
+                    delay(3000)
+                    println("io")
+                }
+                println("launchFinish")
+            }
+            val deferred = async {
+                delay(500)
+                "async"
+            }
+            val result = deferred.await()
+            println(result)
+        }
     }
 }
