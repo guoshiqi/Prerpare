@@ -78,6 +78,7 @@ class MainListActivity : ComponentActivity() {
         }
         binding.rvList.adapter = adapter
         viewModel.loadArticles(false)
+        viewModel.loadArticles(true)
     }
 
 
