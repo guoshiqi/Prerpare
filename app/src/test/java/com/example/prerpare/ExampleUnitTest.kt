@@ -3,6 +3,7 @@ package com.example.prerpare
 import android.util.Log
 import com.example.prerpare.data.network.ApiService
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -149,5 +150,19 @@ class ExampleUnitTest {
             val result = deferred.await()
             println(result)
         }
+    }
+
+    @Test
+    fun testCancelScope() {
+        runBlocking {
+            val job1 = launch {
+                println("start")
+                delay(5000)
+                println("end")
+            }
+            delay(1000)
+            job1.cancel()
+        }
+
     }
 }
