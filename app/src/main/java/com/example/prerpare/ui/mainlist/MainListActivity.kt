@@ -65,16 +65,32 @@ class MainListActivity : ComponentActivity() {
             }
         }
 
+        lifecycleScope.launch {
+            viewModel.eventFlow.collect { event->
+                when(event){
+                    is EventHint.Hint-> {
+                        Toast.makeText(this@MainListActivity, event.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    is EventHint.NavigateToDetail-> {
+                        val intent = Intent(
+                            this@MainListActivity,
+                            ListDetailActivity::class.java
+                        )
+                        intent.putExtra("data", event.data)
+                        startActivity(intent)
+                    }
+                }
+
+            }
+        }
+
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.loadArticles(true)
         }
         binding.rvList.layoutManager = LinearLayoutManager(this)
         adapter = ArticleAdapter { article, position ->
-            run {
-                val intent = Intent(this, ListDetailActivity::class.java)
-                intent.putExtra("data", article)
-                startActivity(intent)
-            }
+           viewModel.jumToNext(article)
         }
         binding.rvList.adapter = adapter
         viewModel.loadArticles(false)
@@ -84,7 +100,7 @@ class MainListActivity : ComponentActivity() {
 
     private fun showError(message: String) {
         binding.emptyView.visibility = View.GONE
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showEmpty() {
