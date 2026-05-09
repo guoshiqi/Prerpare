@@ -30,7 +30,7 @@ class MainListActivity : ComponentActivity() {
         setContentView(binding.root)
         // 创建 Repository 和 ViewModelFactory
         val localDataSource =
-            LocalDataSource(DatabaseHelper.getDatabase(applicationContext).articleDao())
+            LocalDataSource(DatabaseHelper.getDatabase(this).articleDao())
         val remoteDataSource =
             RemoteDataSource((applicationContext as PrepareApplication).apiService)
         val articleRepository = MainListRepository(localDataSource, remoteDataSource)
@@ -66,13 +66,14 @@ class MainListActivity : ComponentActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.eventFlow.collect { event->
-                when(event){
-                    is EventHint.Hint-> {
+            viewModel.eventFlow.collect { event ->
+                when (event) {
+                    is EventHint.Hint -> {
                         Toast.makeText(this@MainListActivity, event.message, Toast.LENGTH_SHORT)
                             .show()
                     }
-                    is EventHint.NavigateToDetail-> {
+
+                    is EventHint.NavigateToDetail -> {
                         val intent = Intent(
                             this@MainListActivity,
                             ListDetailActivity::class.java
@@ -90,7 +91,7 @@ class MainListActivity : ComponentActivity() {
         }
         binding.rvList.layoutManager = LinearLayoutManager(this)
         adapter = ArticleAdapter { article, position ->
-           viewModel.jumToNext(article)
+            viewModel.jumToNext(article)
         }
         binding.rvList.adapter = adapter
         viewModel.loadArticles(false)
@@ -113,7 +114,7 @@ class MainListActivity : ComponentActivity() {
     }
 
     private fun showData(articles: List<Article>) {
-        adapter.setData(articles)
+        adapter.submitList(articles)
         binding.emptyView.visibility = View.GONE
     }
 }

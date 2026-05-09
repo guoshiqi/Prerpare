@@ -2,6 +2,11 @@ package com.example.prerpare
 
 import android.app.Application
 import com.example.prerpare.data.network.ApiService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
@@ -13,19 +18,24 @@ class PrepareApplication : Application() {
     lateinit var apiService: ApiService
     private lateinit var mockWebServer: MockWebServer
     var baseUrl = "https://api.github.com/".toHttpUrl()
+    private val applicationScope = CoroutineScope(
+        SupervisorJob() + Dispatchers.Default
+    )
 
     override fun onCreate() {
         super.onCreate()
-        initMockServer()
-        val okHttpClient = OkHttpClient()
-        val retrofit = Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())  // 添加Gson转换器
-            .build()
+        applicationScope.launch {
+            initMockServer()
+            val okHttpClient = OkHttpClient()
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .client(okHttpClient)
+                .addConverterFactory(GsonConverterFactory.create())  // 添加Gson转换器
+                .build()
 
-        apiService = retrofit.create(ApiService::class.java)
-        mockResponse()
+            apiService = retrofit.create(ApiService::class.java)
+            mockResponse()
+        }
     }
 
     fun initMockServer() {

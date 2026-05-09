@@ -2,21 +2,15 @@ package com.example.prerpare.ui.mainlist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.prerpare.data.model.Article
 import com.example.prerpare.databinding.ItemArticleBinding
 
-class ArticleAdapter(
-    private val onItemClick: (Article, Int) -> Unit
-) : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
+class ArticleAdapter(private val onItemClick: (Article, Int) -> Unit) :
+    ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(ArticleDifferCallback()) {
 
-    private val items = mutableListOf<Article>()
-
-    fun setData(newList: List<Article>) {
-        items.clear()
-        items.addAll(newList)
-        notifyDataSetChanged()
-    }
 
     class ArticleViewHolder(
         private val binding: ItemArticleBinding
@@ -38,16 +32,14 @@ class ArticleAdapter(
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
         holder.itemView.setOnClickListener {
             val currentPosition = holder.bindingAdapterPosition
             if (currentPosition != RecyclerView.NO_POSITION) {
-                onItemClick(items[currentPosition], currentPosition)
+                onItemClick(getItem(position), currentPosition)
             }
         }
     }
-
-    override fun getItemCount(): Int = items.size
 
 
 }
